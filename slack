@@ -1,0 +1,27 @@
+from flask import Flask, request, Response
+import requests
+import json
+app = Flask(__name__)
+@app.route(‘/’, methods=[‘POST’])
+def verify():
+data = request.json
+if data[‘event’][‘type’] == “app_mention”:
+user_text = data[‘event’][‘text’]
+user = data[‘event’][‘user’]
+webhook_url = ‘https://hooks.slack.com/services/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’
+slack_data = { “text”: “How can I help you ?” }
+response = requests.post(
+webhook_url, data=json.dumps(slack_data),
+headers={‘Content-Type’: ‘application/json’}
+)
+return(‘’, 204)
+if __name__ == “__main__”:
+app.run(debug=True)
+
+
+## The code below is found under incoming webhooks in slack api.  It outputs hello world to slack
+curl -X POST -H 'Content-type:
+application/json' --data '{"text":"Hello,
+World!"}'
+https://hooks.slack.com/services/T257UBDHD/B02
+K116U65P/efQgWJj4YoZRJB87eqFqkiYb
