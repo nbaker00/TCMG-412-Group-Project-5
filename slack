@@ -1,27 +1,36 @@
-from flask import Flask, request, Response
 import requests
-import json
-app = Flask(__name__)
-@app.route(‘/’, methods=[‘POST’])
-def verify():
-data = request.json
-if data[‘event’][‘type’] == “app_mention”:
-user_text = data[‘event’][‘text’]
-user = data[‘event’][‘user’]
-webhook_url = ‘https://hooks.slack.com/services/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’
-slack_data = { “text”: “How can I help you ?” }
-response = requests.post(
-webhook_url, data=json.dumps(slack_data),
-headers={‘Content-Type’: ‘application/json’}
-)
-return(‘’, 204)
-if __name__ == “__main__”:
-app.run(debug=True)
+import sys
+import getopt
+
+#send message to slack
+
+def send_slack_message(message):
+    payload = '{"text": "%s"}' %message
+    response = requests.post('https://hooks.slack.com/services/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',
+                            data=payload)
+    print(response.text)
 
 
-## The code below is found under incoming webhooks in slack api.  It outputs hello world to slack
-curl -X POST -H 'Content-type:
-application/json' --data '{"text":"Hello,
-World!"}'
-https://hooks.slack.com/services/T257UBDHD/B02
-K116U65P/efQgWJj4YoZRJB87eqFqkiYb
+def main(argv):
+
+    message = ' '
+
+    try: opts, args = getopt.getopt(argv, "hm:", ["message"])
+
+    except getopt.GetoptError:
+        print("SlackMessage.py -m <message>")
+        sys.exit(2)
+    if len(opts) == 0:
+        message = "Hello. It works!"
+    for opt, arg in opts:
+        if opt == '-h':
+            print("SlackMessage.py -m <message>")
+            sys.exit()
+        elif opt in ("-m", "--message"):
+            message = arg
+
+    send_slack_message(message)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
