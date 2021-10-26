@@ -1,5 +1,7 @@
+
 number = int(input("Enter a number: "))
 
+@app.route("/fibonacci")
 def fib(number):
     a = 0
     b = 1
@@ -17,5 +19,5 @@ def fib(number):
             b = c
             print(c)
 
-fib(number)
+return fib(number)
   
