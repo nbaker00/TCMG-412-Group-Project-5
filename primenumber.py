@@ -1,5 +1,4 @@
 from flask import Flask
-from flask.scaffold import F
 app = Flask(__name__)
 x= int(input("Enter a number: "))
 ans=0
