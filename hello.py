@@ -43,19 +43,16 @@ def isPrime(x):
 
 import math
 
-n = int(input("Enter a number: "))
-fact = 1
+@app.route("/factorial/<int:n>")
+def factorial(n):
 
-for i in range(1,n+1):
-   fact = fact * i
+    fact = 1
 
-if n >= 0:
-   print("The factorial of the number is: ",end="")
-   print(fact)
-else:
-   print("Please enter a non negative integer")
-@app.route("/factorial")
-def factorial():
+    for i in range(1,n+1):
+        fact = fact * i
+
+
+
     return jsonify({'input':n, "output": fact})
 
 
