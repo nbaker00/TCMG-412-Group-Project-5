@@ -75,5 +75,78 @@ def fib(number):
             f.append(c)
     return jsonify(input=number, output=f)
 
+
+
+import requests
+import sys
+import getopt
+
+#send message to slack
+
+def send_slack_message(message):
+    payload = '{"text": "%s"}' % message
+    response = requests.post('import requests
+import sys
+import getopt
+
+#send message to slack
+
+def send_slack_message(message):
+    payload = '{"text": "%s"}' % message
+    response = requests.post('https://hooks.slack.com/services/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',
+                            data=payload)
+                            
+    print(response.text)
+
+
+def main(argv):
+
+    message = ' '
+
+    try: opts, args = getopt.getopt(argv, "hm:", ["message"])
+
+    except getopt.GetoptError:
+        print("SlackMessage.py -m <message>")
+        sys.exit(2)
+    if len(opts) == 0:
+        message = "Hello. It works!"
+    for opt, arg in opts:
+        if opt == '-h':
+            print("SlackMessage.py -m <message>")
+            sys.exit()
+        elif opt in ("-m", "--message"):
+            message = arg
+
+    send_slack_message(message)
+
+
+if __name__ == "__main__":
+    main(sys.argv[1:])',
+                            data=payload)
+    print(response.text)
+
+
+def main(argv):
+
+    message = ' '
+
+    try: opts, args = getopt.getopt(argv, "hm:", ["message"])
+
+    except getopt.GetoptError:
+        print("SlackMessage.py -m <message>")
+        sys.exit(2)
+    if len(opts) == 0:
+        message = "Hello. It works!"
+    for opt, arg in opts:
+        if opt == '-h':
+            print("SlackMessage.py -m <message>")
+            sys.exit()
+        elif opt in ("-m", "--message"):
+            message = arg
+
+    send_slack_message(message)
+if __name__ == "__main__":
+    main(sys.argv[1:])
+    
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
