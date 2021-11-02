@@ -82,6 +82,7 @@ import sys
 import getopt
 
 #send message to slack
+@app.route("/slack-alert/<string:message>")
 
 def send_slack_message(message):
     payload = '{"text": "%s"}' % message
