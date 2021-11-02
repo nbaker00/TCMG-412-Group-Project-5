@@ -20,28 +20,24 @@ def main():
         return(hashlib.md5('Hello World'.encode('UTF-8')).hexdigest())
         return "<p>Hello, World!</p>"
 
-x= int(input("Enter a number: "))
-ans=0
-if x > 1:
-    for i in range(2, x):
-        if x % i == 0:
+@app.route("/is-prime/<int:x>")   
+def isPrime(x):    
+    ans=0
+    if x > 1:
+        for i in range(2, x):
+            if x % i == 0:
 
-            f = (False)
-            ans=False
-            print(ans)
-            break
-    else:
+                f = (False)
+                ans= False
+                break
+        else:
 
-        t= (True)
-        ans = True
-        print(ans)
-
-@app.route("/is-prime")
-def isPrime():
+            t= (True)
+            ans = True  
     if ans == True:
-        return "{}. {} is a Prime Number".format(t,x)
+        return jsonify(input=x, output=True)
     if ans == False:
-        return "{}. {} is not a Prime Number".format(f,x)
+        return jsonify(input=x, output=False)
 
 
 
