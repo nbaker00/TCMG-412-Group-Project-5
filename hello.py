@@ -55,32 +55,25 @@ def factorial(n):
 
     return jsonify({'input':n, "output": fact})
 
+@app.route("/fibonacci/<int:number>")
+def fib(number):
+    f = []
 
-number = int(input("Enter a number: "))
+    a = 0
+    b = 1
+    c = 0
+    if number == 1:
+        f.append(a)
 
-f = []
-
-a = 0
-b = 1
-c = 0
-if number == 1:
-    f.append(a)
-elif number < 1:
-    print("Please enter a positive integer")
-else:
-    f.append(a)
-    f.append(b)
-    while c < number:
-        c = a + b
-        a = b
-        b = c
-        f.append(c)
-
-print(f)
-
-@app.route("/fibonacci")
-def fib():
-    return "The sequence is {}.".format(str(f)[1:-1])
+    else:
+        f.append(a)
+        f.append(b)
+        while c < number:
+            c = a + b
+            a = b
+            b = c
+            f.append(c)
+    return jsonify(input=number, output=f)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
