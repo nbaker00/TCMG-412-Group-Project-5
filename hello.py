@@ -13,12 +13,12 @@ def hello_world():
     return "<p>Hello, World!</p>"
 
 import hashlib
+    
+@app.route("/md5/<string:word>")
+def main(word):
 
-@app.route("/md5")
-def main():
-
-        return(hashlib.md5('Hello World'.encode('UTF-8')).hexdigest())
-        return "<p>Hello, World!</p>"
+        hash = hashlib.md5(word.encode())
+        return jsonify(input=word, output=hash.hexdigest())
 
 @app.route("/is-prime/<int:x>")   
 def isPrime(x):    
