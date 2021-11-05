@@ -116,5 +116,5 @@ def main(argv):
     send_slack_message(message)
 
 
-if __name__ == "__main__":
+if __name__ == "__hello__":
     main(sys.argv[1:])
