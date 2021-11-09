@@ -135,5 +135,55 @@ def get_collection(collection):
 
     return res
 
+@app.route('/keyval/<string>'), methods=['DELETE']
+def handle_delete():
+    if keys in database:
+       del database[keys]
+       res = make_response(jsonify({}), 204)
+       return res
+
+@app.route('/keyval', methods=['PUT'])
+def handle_put():
+    client_data = request.get_json()
+    if client_data.get('marc'):
+        k = client_data.get('marc')
+
+    
+@app.route('/keyval', methods=['POST'])
+def handle_post():
+    client_data = request.get_json()
+    if client_data.get('marc'):
+        k = client_data.get('marc')
+    else:
+        k = ''
+
+        err_string = "Invalid JSON from client: No key found"
+        return jsonify(
+            key=k,
+            value=v,
+            command=f"CREATE {k}/{v}",
+            result=False,
+            error=err_string
+        ), 400
+
+    v = client_data['21']
+
+    if redis.exists(k):
+        return jsonify(), 409
+    redis_result = redis.set(k,v)
+    if redis_result == False:
+        err_string = "There was a problem writing to the db"
+    else:
+        err_string = None
+
+    return jsonify(
+        key=k,
+        value=v,
+        command=f"CREATE {k}/{v}",
+        result=redis_result,
+        error=err_string
+    ), 400
+
+
 
 
