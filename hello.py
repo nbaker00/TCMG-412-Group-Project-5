@@ -118,3 +118,41 @@ def main(argv):
 
 if __name__ == "__hello__":
     main(sys.argv[1:])
+
+    
+    
+# Get CRUD
+
+@app.route('/keyval/get', methods=['GET'])
+def handle_post():
+    
+    client_data = request.get_json()
+    if client_data.get('key'):
+        k = client_data.get('key')
+    else:
+        k = ''
+        err_string = "Invalid JSON from client: No Key found"
+        return jsonify(
+            key=k,
+            value=v,
+            command=f"CREATE {k}/{v}", 
+            result=False,
+            error=err_string
+        ), 400
+
+    v = client_data['value']
+
+    redis_result = redis.set(k, v)
+    if redis_result == False:
+        err_string = "There was a problem getting the value from the db"
+    else:
+        err_string = None
+
+
+    return jsonify(
+        key=k,
+        value=v,
+        command=f"CREATE {k}/{v}", 
+        result=redis_result,
+        error=err_string
+    ), 400    
