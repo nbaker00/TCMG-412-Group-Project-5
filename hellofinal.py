@@ -1,10 +1,11 @@
-from flask import Flask
-from flask import jsonify
+from flask import Flask, jsonify, request
+import redis
+from redis import Redis, StrictRedis, RedisError
 
-#import os
+import os
 #import socket
 
-#redis = Redis(host="redis", db=0, socket_connect_timeout=2, socket_timeout=2)
+redis = redis.StrictRedis('redis-server', 6379, charset="utf-8", decode_responses=True)
 
 app = Flask(__name__)
 
@@ -77,55 +78,36 @@ def fib(number):
 
 
 
-#import requests
-import sys
-import getopt
-
 #send message to slack
 @app.route("/slack-alert/<string:message>")
+def sendslackmessage(message):
+    #create the slack client
+    import slack_sdk 
+    from slack_sdk.errors import SlackApiError   
+    try:
+        client = slack_sdk.WebClient(token=os.environ['SLACK_TOKEN'])
+    except:
+        return jsonify(input=message, output=False, error='Could not talk to slack service'), 503
+    
+    #send slack the message
+    try:
+        response = client.chat_postMessage(channel="C011KJWHA22", text=message)
+    except SlackApiError as e:
+        return jsonify(input=message, output=False, error='there was a slack api error'), 500
+        
+    #check for success
+    if response.status_code == 200:
+        return jsonify(input=message, output=True)
+    else:
+        return jsonify(input=message, output=False, error='slack returns not 200 error'), 502
 
-#def send_slack_message(message):
-    #payload = '{"text": "%s"}' % message
-    #response = requests.post('import requests')
-
-#send message to slack
-
-def send_slack_message(message):
-    payload = '{"text": "%s"}' % message
-    response = requests.post('https://hooks.slack.com/services/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',
-                            data=payload)
-
-    print(response.text)
-
-def main(argv):
-
-    message = ' '
-
-    try: opts, args = getopt.getopt(argv, "hm:", ["message"])
-
-    except getopt.GetoptError:
-        print("SlackMessage.py -m <message>")
-
-    except getopt.GetoptError:
-        print("SlackMessage.py -m <message>")
-        sys.exit(2)
-    if len(opts) == 0:
-        message = "Hello. It works!"
-    for opt, arg in opts:
-        if opt == '-h':
-            print("SlackMessage.py -m <message>")
-            sys.exit()
-        elif opt in ("-m", "--message"):
-            message = arg
-
-    send_slack_message(message)
+    
 
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=80)
 
-if __name__ == "__main__":
-    main(sys.argv[1:])
+
 
 @app.route("/keyval/<collection>")
 def get_collection(collection):
