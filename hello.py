@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import jsonify
+from flask import make_response
 
 #import os
 #import socket
@@ -123,19 +124,22 @@ if __name__ == "__hello__":
     
 # Get CRUD
 
-@app.route("/keyval/<collection>")
+@app.route('/keyval/<string>' methods=['GET'])
 def get_collection(collection):
 
 
     if collection in stock:
         res = make_response(jsonify(stock[collection]), 200)
         return res
+    else:
+    res1= make_response(jsonify({"error": "Invalid request"}), 400)
 
-    res = res = make_response(jsonify({"error": "Not found"}), 404)
+        return res1
 
-    return res
+    else: res2=make_response(jsonify({"error": "Key does not exist"}), 404)
+        return res2
 
-@app.route('/keyval/<string>'), methods=['DELETE']
+@app.route('/keyval/<string>', methods=['DELETE'])
 def handle_delete():
     if keys in database:
        del database[keys]
